@@ -1,0 +1,9 @@
+:host ::ng-deep .severity-Low {
+  color: limegreen;
+}
+:host ::ng-deep .severity-Medium {
+  color: gold;
+}
+:host ::ng-deep .severity-High {
+  color: firebrick;
+}

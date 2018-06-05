@@ -1,0 +1,14 @@
+<h2>Alert Details</h2>
+<hr>
+<dl *ngIf="alert">
+  <dt>AlertId:</dt> <dd>{{alert.AlertId}}</dd>
+  <dt>AlertTime:</dt> <dd>{{alert.AlertTime}}</dd>
+  <dt>Severity:</dt> <dd class="severity-{{alert.Severity}}">{{alert.Severity}}</dd>
+  <dt>ClientIP:</dt> <dd>{{alert.ClientIP}}</dd>
+  <dt>ServerIP:</dt> <dd>{{alert.ServerIP}}</dd>
+  <dt>Protocol:</dt> <dd>{{alert.Protocol}}</dd>
+  <dt>ClientCountry:</dt> <dd>{{alert.ClientCountry}}</dd>
+</dl>
+<div *ngIf="!alert">
+  Click a row to view alert details.
+</div>

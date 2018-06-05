@@ -1,0 +1,28 @@
+<div class="wrap">
+<table class="alerts-list">
+  <thead>
+      <tr>      
+        <th>AlertId</th>
+        <th>AlertTime</th>
+        <th>Severity</th>
+        <th>ClientIP</th>
+        <th>ServerIP</th>
+        <th>Protocol</th>
+        <th>ClientCountry</th>
+      </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let alert of alerts; let i = index;" 
+      [class.alt-row]="i % 2"
+      (click)="rowClicked(alert)">      
+      <td>{{alert.AlertId}}</td>
+      <td>{{alert.AlertTime}}</td>
+      <td class="severity-{{alert.Severity}}">{{alert.Severity}}</td>
+      <td>{{alert.ClientIP}}</td>
+      <td>{{alert.ServerIP}}</td>
+      <td>{{alert.Protocol}}</td>
+      <td>{{alert.ClientCountry}}</td>
+    </tr>
+  </tbody>
+</table>
+</div>

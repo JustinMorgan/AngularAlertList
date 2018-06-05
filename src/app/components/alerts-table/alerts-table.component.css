@@ -1,0 +1,32 @@
+.wrap {  
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.alerts-list {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th {
+  font-weight: normal;
+}
+
+tbody tr {
+  background-color: #ddd;
+}
+tbody tr.alt-row {
+  background-color: #fff;
+}
+thead tr {
+  background-color: #aaa;
+}
+
+tbody {
+  background-color: #000;
+}
+
+tbody tr:hover {
+  cursor: pointer;
+  opacity: 0.97;
+}

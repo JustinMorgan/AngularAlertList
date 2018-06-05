@@ -1,0 +1,18 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2">
+        <app-alert-filters [alerts]="alerts" (addFilter)="addFilter($event)"></app-alert-filters>
+    </div>
+    <div class="col-md-8">
+      <app-alerts-table [alerts]="filteredAlerts" (showDetail)="showDetail($event)"></app-alerts-table>
+    </div>
+    <div class="col-md-2">
+      <app-alert-details [alert]="selectedAlert"></app-alert-details>
+    </div>
+  </div>
+</div>
+
+
+
+
+
