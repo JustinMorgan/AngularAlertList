@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AlertFiltersComponent } from './alert-filters.component';
+import { AlertFilterComponent } from './alert-filter.component';
 
-describe('AlertFiltersComponent', () => {
-  let component: AlertFiltersComponent;
-  let fixture: ComponentFixture<AlertFiltersComponent>;
+describe('AlertFilterComponent', () => {
+  let component: AlertFilterComponent;
+  let fixture: ComponentFixture<AlertFilterComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AlertFiltersComponent ]
+      declarations: [ AlertFilterComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AlertFiltersComponent);
+    fixture = TestBed.createComponent(AlertFilterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

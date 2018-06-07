@@ -12,6 +12,8 @@ export class MainComponent implements OnInit {
   public alerts: Alert[];
   public filteredAlerts: Alert[];
   public selectedAlert: Alert;
+  public linkFilters: ((alert: Alert) => boolean)[] = [];
+  public searchFilter: (alert: Alert) => boolean = (alert: Alert) => true;
 
   constructor(private alertsService: AlertsService) { }
 
@@ -23,7 +25,27 @@ export class MainComponent implements OnInit {
     this.selectedAlert = alert;
   }
 
-  addFilter({value, key}) {
-    this.filteredAlerts = this.alerts.filter((alert: Alert) => alert[key] === value);
+  addFilter(filterCallback) {
+    this.linkFilters.push(filterCallback);
+    this.filter();
+  }
+
+  search(filterCallback) {
+    this.searchFilter = filterCallback;
+    this.filter();
+  }
+
+  filter() {
+    const composedFilter = (alert: Alert) =>
+      this.linkFilters
+        .concat(this.searchFilter)
+        .every(filter => filter(alert));
+
+    this.filteredAlerts = this.alerts.filter(composedFilter);
+  }
+
+  clearFilters() {
+    this.linkFilters = [];
+    this.filteredAlerts = this.alerts.filter(this.searchFilter);
   }
 }

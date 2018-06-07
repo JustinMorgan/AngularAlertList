@@ -1,9 +1,29 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-2">
-        <app-alert-filters [alerts]="alerts" (addFilter)="addFilter($event)"></app-alert-filters>
+      <h1 class="row">
+        <div class="col-md-9">
+          Filters
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-outline-secondary" (click)="clearFilters()">Clear</button>
+        </div>        
+      </h1>
+      <hr>
+      <app-alert-filter [alerts]="filteredAlerts" (addFilter)="addFilter($event)" key="Severity"></app-alert-filter>
+      <app-alert-filter [alerts]="filteredAlerts" (addFilter)="addFilter($event)" key="Protocol"></app-alert-filter>
+      <app-alert-filter [alerts]="filteredAlerts" (addFilter)="addFilter($event)" key="ClientIP"></app-alert-filter>
     </div>
     <div class="col-md-8">
+      <h1 class="row form-group">
+        <div class="col-md-6">
+          Alerts
+          <span *ngIf="filteredAlerts">({{filteredAlerts.length}})</span>
+        </div>
+        <div class="col-md-6">
+          <app-alert-search (search)="search($event)"></app-alert-search>
+        </div>
+      </h1>
       <app-alerts-table [alerts]="filteredAlerts" (showDetail)="showDetail($event)"></app-alerts-table>
     </div>
     <div class="col-md-2">
