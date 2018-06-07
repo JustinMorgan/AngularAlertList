@@ -1,11 +1,17 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { Alert } from '../../models/alert';
 
-function groupBy(list: any[], key: string): any[] {
-  return list.reduce(function(result, listItem) {
-    (result[listItem[key]] = result[listItem[key]] || []).push(listItem);
-    return result;
-  }, {});
+function mapBy<K, T>(list: T[], propName: string): Map<K, T[]> {
+  const map = new Map<K, T[]>();
+  list.forEach(item => {
+    const propValue = item[propName];
+    if (!map.has(propValue)) {
+      map.set(propValue, []);
+    }
+    const group = map.get(propValue);
+    group.push(item);
+  });
+  return map;
 }
 
 @Component({
@@ -15,34 +21,28 @@ function groupBy(list: any[], key: string): any[] {
 })
 export class AlertFilterComponent implements OnInit, OnChanges {
 
-  @Input()
-  public alerts: Alert[];
+  @Input() public alerts: Alert[];
+  @Input() public key;
+  @Output() public addFilter = new EventEmitter<any>();
 
-  @Input()
-  public key;
-
-  @Output()
-  public addFilter = new EventEmitter<any>();
-
-  public counts: {name: string, count: number}[];
+  public counts: ({value: any, count: number})[];
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  ngOnChanges(changes) {
-    if (this.alerts) {
-      const groups = groupBy(this.alerts, this.key);
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.alerts.currentValue) {
+      const groups = mapBy(this.alerts, this.key);
       this.counts =
-        Object.keys(groups)
-          .map((key: string) => ({name: key, count: groups[key].length}))
-            .filter(item => item.count > 0);
+        Array.from(groups.entries())
+          .map(([value, alerts]) => ({value, count: alerts.length}));
     }
   }
 
   onFilter(value) {
     const filterCallback = (alert: Alert) => alert[this.key] === value;
-    this.addFilter.emit(filterCallback);
+    this.addFilter.emit({filterCallback, key: this.key});
   }
 }

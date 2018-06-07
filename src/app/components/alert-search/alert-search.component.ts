@@ -1,6 +1,8 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Alert } from './../../models/alert';
 
+const keys = ['AlertId', 'AlertTime', 'Severity', 'ClientIP', 'ServerIP', 'Protocol', 'ClientCountry'];
+
 @Component({
   selector: 'app-alert-search',
   templateUrl: './alert-search.component.html',
@@ -18,12 +20,9 @@ export class AlertSearchComponent implements OnInit {
   ngOnInit() {
   }
 
-  onKeyup() {
-    const keys = ['AlertId', 'AlertTime', 'Severity', 'ClientIP', 'ServerIP', 'Protocol', 'ClientCountry'];
+  onModelChange() {
     const searchString = (this.searchString + '').toLowerCase();
-
     const filter = (alert: Alert) => keys.some(key => (alert[key] + '').toLowerCase().includes(searchString));
-
     this.search.emit(filter);
   }
 }

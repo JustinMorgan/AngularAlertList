@@ -1,6 +1,8 @@
 <h3>{{key}}:</h3>
 
+<ng-container *ngIf="counts">
 <div class="row" *ngFor="let item of counts">
-  <span class="col-md-10"><a href="#" (click)="onFilter(item.name)">{{item.name}}</a></span>
+  <span class="col-md-10"><a href="#" (click)="onFilter(item.value)">{{item.value}}</a></span>
   <span class="col-md-2">{{item.count}}</span>
 </div>
+</ng-container>

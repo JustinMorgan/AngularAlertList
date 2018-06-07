@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AlertsService } from './../../services/alerts/alerts.service';
 import { Alert } from './../../models/alert';
 
+type Filter = (alert: Alert) => boolean;
+
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -12,7 +14,7 @@ export class MainComponent implements OnInit {
   public alerts: Alert[];
   public filteredAlerts: Alert[];
   public selectedAlert: Alert;
-  public linkFilters: ((alert: Alert) => boolean)[] = [];
+  public linkFilters = new Map<string, Filter>();
   public searchFilter: (alert: Alert) => boolean = (alert: Alert) => true;
 
   constructor(private alertsService: AlertsService) { }
@@ -25,27 +27,24 @@ export class MainComponent implements OnInit {
     this.selectedAlert = alert;
   }
 
-  addFilter(filterCallback) {
-    this.linkFilters.push(filterCallback);
-    this.filter();
-  }
-
   search(filterCallback) {
     this.searchFilter = filterCallback;
     this.filter();
   }
 
-  filter() {
-    const composedFilter = (alert: Alert) =>
-      this.linkFilters
-        .concat(this.searchFilter)
-        .every(filter => filter(alert));
-
-    this.filteredAlerts = this.alerts.filter(composedFilter);
+  addFilter({filterCallback, key}) {
+    this.linkFilters.set(key, filterCallback);
+    this.filter();
   }
 
   clearFilters() {
-    this.linkFilters = [];
-    this.filteredAlerts = this.alerts.filter(this.searchFilter);
+    this.linkFilters.clear();
+    this.filter();
+  }
+
+  filter() {
+    this.filteredAlerts = this.alerts;
+    this.filteredAlerts = this.filteredAlerts.filter(this.searchFilter);
+    this.linkFilters.forEach(filter => this.filteredAlerts = this.filteredAlerts.filter(filter));
   }
 }
