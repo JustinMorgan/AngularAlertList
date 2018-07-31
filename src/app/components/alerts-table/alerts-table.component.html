@@ -12,16 +12,14 @@
         </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let alert of alerts; let i = index;" 
-        [class.alt-row]="i % 2"
-        (click)="rowClicked(alert)">      
-        <td>{{alert.AlertId}}</td>
-        <td>{{alert.AlertTime}}</td>
-        <td class="severity-{{alert.Severity}}">{{alert.Severity}}</td>
-        <td>{{alert.ClientIP}}</td>
-        <td>{{alert.ServerIP}}</td>
-        <td>{{alert.Protocol}}</td>
-        <td>{{alert.ClientCountry}}</td>
+      <tr *ngFor="let alert of alerts; let i = index;" [class.alt-row]="i % 2">      
+        <td (click)="rowClicked(alert)">{{alert.AlertId}}</td>
+        <td (click)="rowClicked(alert)">{{alert.AlertTime}}</td>
+        <td (click)="rowClicked(alert)" class="severity-{{alert.Severity}}">{{alert.Severity}}</td>
+        <td (click)="rowClicked(alert)">{{alert.ClientIP}}</td>
+        <td (click)="rowClicked(alert)">{{alert.ServerIP}}</td>
+        <td (click)="rowClicked(alert)">{{alert.Protocol}}</td>
+        <td (click)="rowClicked(alert)">{{alert.ClientCountry}}</td>
       </tr>
     </tbody>
   </table>

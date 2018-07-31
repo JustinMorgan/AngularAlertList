@@ -1,18 +1,18 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { Alert } from '../../models/alert';
 
-function mapBy<K, T>(list: T[], propName: string): Map<K, T[]> {
-  const map = new Map<K, T[]>();
-  list.forEach(item => {
-    const propValue = item[propName];
-    if (!map.has(propValue)) {
-      map.set(propValue, []);
+// Counts repetitions of values in an array
+// [a, a, b, b, b, c] => [{value:a, count:2}, {value:b, count:3}, {value:c, count:1}]
+const createReducer = () => {
+  const lookup = {}; // for faster lookup of existing entries
+  return (accumulator, value) => {
+    if (!lookup[value]) {
+      accumulator.push(lookup[value] = {value, count: 0});
     }
-    const group = map.get(propValue);
-    group.push(item);
-  });
-  return map;
-}
+    lookup[value].count++;
+    return accumulator;
+  };
+};
 
 @Component({
   selector: 'app-alert-filter',
@@ -34,10 +34,9 @@ export class AlertFilterComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.alerts.currentValue) {
-      const groups = mapBy(this.alerts, this.key);
-      this.counts =
-        Array.from(groups.entries())
-          .map(([value, alerts]) => ({value, count: alerts.length}));
+      this.counts = this.alerts
+        .map(alert => alert[this.key])
+        .reduce(createReducer(), []);
     }
   }
 

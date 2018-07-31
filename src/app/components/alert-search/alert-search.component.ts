@@ -22,7 +22,7 @@ export class AlertSearchComponent implements OnInit {
 
   onModelChange() {
     const searchString = (this.searchString + '').toLowerCase();
-    const filter = (alert: Alert) => keys.some(key => (alert[key] + '').toLowerCase().includes(searchString));
+    const filter = (alert: Alert) => Object.values(alert).some(value => (value + '').toLowerCase().includes(searchString));
     this.search.emit(filter);
   }
 }

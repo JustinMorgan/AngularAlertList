@@ -12,6 +12,10 @@ th {
   font-weight: normal;
 }
 
+td {
+  padding: 3px;
+}
+
 tbody tr {
   background-color: #ddd;
 }
