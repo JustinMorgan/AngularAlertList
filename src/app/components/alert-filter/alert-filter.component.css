@@ -3,4 +3,11 @@ h3 {
   border-bottom: 1px solid #ddd;
   padding-bottom: 5px;
   margin-top: 20px;
+  margin-bottom: auto;
+}
+.clear-button {
+  display: inline-block;
+  height: 20px;
+  padding: 2px;
+  line-height: 0;
 }

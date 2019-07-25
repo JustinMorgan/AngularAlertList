@@ -1,50 +1,59 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AlertsService } from './../../services/alerts/alerts.service';
 import { Alert } from './../../models/alert';
+import { Subject, Observable, concat, BehaviorSubject } from 'rxjs';
+import { FilterService } from 'src/app/services/filters/filters.service';
+import { takeUntil, withLatestFrom, map } from 'rxjs/operators';
+import { Filter } from 'src/app/models/filter';
 
-type Filter = (alert: Alert) => boolean;
+// type Filter = (alert: Alert) => boolean;
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, OnDestroy {
 
-  public alerts: Alert[];
-  public filteredAlerts: Alert[];
   public selectedAlert: Alert;
-  public linkFilters = new Map<string, Filter>();
-  public searchFilter: (alert: Alert) => boolean = (alert: Alert) => true;
+  public filteredAlert$: Subject<Alert[]>;
+  public filters$: Observable<Map<string, Filter>>;
 
-  constructor(private alertsService: AlertsService) { }
+  private ngUnsubscribe = new Subject<void>();
 
-  ngOnInit() {
-    this.alertsService.getAlerts().subscribe(alerts => this.filteredAlerts = this.alerts = alerts);
+  constructor(private alertsService: AlertsService, private filterService: FilterService) { }
+
+  async ngOnInit() {
+    const alerts = await this.alertsService.getAlerts().toPromise();
+    this.filteredAlert$ = new BehaviorSubject(alerts);
+
+    this.filters$ = this.filterService.filters$.asObservable();
+
+    this.filterService.filters$
+        .pipe(
+          map(filters => {
+            let filteredAlerts = alerts.slice();
+
+            filters.forEach(filter => {
+              filteredAlerts = filteredAlerts.filter(filter);
+            });
+
+            return alerts;
+          })
+        )
+        .subscribe(this.filteredAlert$);
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   showDetail(alert) {
     this.selectedAlert = alert;
   }
 
-  search(filterCallback) {
-    this.searchFilter = filterCallback;
-    this.filter();
-  }
-
-  addFilter({filterCallback, key}) {
-    this.linkFilters.set(key, filterCallback);
-    this.filter();
-  }
-
   clearFilters() {
-    this.linkFilters.clear();
-    this.filter();
-  }
-
-  filter() {
-    this.filteredAlerts = this.alerts;
-    this.filteredAlerts = this.filteredAlerts.filter(this.searchFilter);
-    this.linkFilters.forEach(filter => this.filteredAlerts = this.filteredAlerts.filter(filter));
+    this.filterService.clearFilters();
   }
 }

@@ -1,18 +1,19 @@
-<div class="container-fluid">
+<div class="container-fluid" *ngIf="filteredAlert$ | async as filteredAlerts">
   <div class="row">
     <div class="col-md-2">
       <h1 class="row">
         <div class="col-md-7">
           Filters
         </div>
-        <div class="col-md-5 clearButton">
-          <button class="btn btn-sm btn-outline-secondary" (click)="clearFilters()" [disabled]="!linkFilters.size">Clear All</button>
-        </div>        
+        <div *ngIf="filters$ | async as filters" class="col-md-5 clearButton">
+          <!-- <button class="btn btn-sm btn-outline-secondary" (click)="clearFilters()" [disabled]="!linkFilters.size">Clear All</button> -->
+          <button class="btn btn-sm btn-outline-secondary" (click)="clearFilters()" [disabled]="!filters.size">Clear All</button>
+        </div>
       </h1>
       <hr>
-      <app-alert-filter [alerts]="filteredAlerts" (addFilter)="addFilter($event)" key="Severity"></app-alert-filter>
-      <app-alert-filter [alerts]="filteredAlerts" (addFilter)="addFilter($event)" key="Protocol"></app-alert-filter>
-      <app-alert-filter [alerts]="filteredAlerts" (addFilter)="addFilter($event)" key="ClientIP"></app-alert-filter>
+      <app-alert-filter [alerts]="filteredAlerts" (setFilter)="setFilter($event)" key="Severity"></app-alert-filter>
+      <app-alert-filter [alerts]="filteredAlerts" (setFilter)="setFilter($event)" key="Protocol"></app-alert-filter>
+      <app-alert-filter [alerts]="filteredAlerts" (setFilter)="setFilter($event)" key="ClientIP"></app-alert-filter>
     </div>
     <div class="col-md-8">
       <h1 class="row form-group">
